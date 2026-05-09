@@ -14,29 +14,34 @@ export class TaskController {
   findAll() {
     return this.taskService.findAll()
   }
-  
-  @Get('by-id/:id')
-  findById(@Param('id') id: string) {
-    return this.taskService.findById(Number(id))
-  }
 
-  @Post('create')
-  create(@Body() dto: CreateTaskDto) {
-    return this.taskService.create(dto)
+  @Post() 
+  create() {
+    return this.taskService.create()
   }
   
-  @Patch('patch-update/:id')
-  patchUpdate(@Param('id') id: string, @Body() dto: PatchUpdateTaskDto) {
-    return this.taskService.patchUpdate(Number(id), dto)
-  }
-
-  @Put('put-update/:id')
-  putUpdate(@Param('id') id: string, @Body() dto: PutUpdateTaskDto) {
-    return this.taskService.putUpdate(Number(id), dto)
-  }
-
-  @Delete('delete/:id')
-  delete(@Param('id') id: string) {
-    return this.taskService.delete(Number(id))
-  }
+  //@Get('by-id/:id')
+  //findById(@Param('id') id: string) {
+  //  return this.taskService.findById(Number(id))
+  //}
+//
+  //@Post('create')
+  //create(@Body() dto: CreateTaskDto) {
+  //  return this.taskService.create(dto)
+  //}
+  //
+  //@Patch('patch-update/:id')
+  //patchUpdate(@Param('id') id: string, @Body() dto: PatchUpdateTaskDto) {
+  //  return this.taskService.patchUpdate(Number(id), dto)
+  //}
+//
+  //@Put('put-update/:id')
+  //putUpdate(@Param('id') id: string, @Body() dto: PutUpdateTaskDto) {
+  //  return this.taskService.putUpdate(Number(id), dto)
+  //}
+//
+  //@Delete('delete/:id')
+  //delete(@Param('id') id: string) {
+  //  return this.taskService.delete(Number(id))
+  //}
 }
