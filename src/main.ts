@@ -1,7 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import {prisma} from '../lib/prisma'
+import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common';
+
+const PORT = process.env.PORT 
+console.log(PORT);
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,15 +24,10 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api'); // Добавляем глобальный префикс для всех маршрутов (например, http://localhost:3000/api/movies)
 
-  await app.listen(process.env.PORT ?? 3000);
-  console.log(`Server is running http://localhost:${process.env.PORT ?? 3000}`);
+  await app.listen(process.env.PORT || 3005);
+  console.log(`Server is running http://localhost:${process.env.PORT || 3005}`);
 }
 bootstrap()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+  
+
+ 

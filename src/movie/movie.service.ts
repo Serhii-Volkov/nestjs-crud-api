@@ -1,31 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMovieDto } from './dto/create-movie.dto';
+import { PrismaService } from '../prisma/prisma.service';
+
 
 @Injectable()
 export class MovieService {
-     private movies = [
-            {id: 1, title: 'Movie 1', description: 'Description of Movie 1', genre: 'Action'},
-            {id: 2, title: 'Movie 2', description: 'Description of Movie 2', genre: 'Comedy'},
-            {id: 3, title: 'Movie 3', description: 'Description of Movie 3', genre: 'Action'},
-        ];
+  constructor(private readonly prisma: PrismaService) {}
 
-    findAll(genre?: string) {
-       
-
-        if(genre) {
-            return this.movies.filter(movie => movie.genre.toLowerCase() === genre.toLowerCase())
+  async findAll() {
+    return await this.prisma.movie.findMany({
+        where: {
+            isAvailable: true
+        },
+        orderBy: {
+            createdAt: 'desc'   
+        },
+        select: {
+            id: true,
+            title: true,
+            releaseYear: true,
+            genre: true,
+            actors: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            }
         }
+        //Нельзя одновременно использовать select и include. Либо то, либо то. 
+        // Если нужно выбрать только определенные поля, то используем select. Если нужно выбрать все поля 
+        // и добавить связанные сущности, то используем include.
+        //include: {
+        //    actors: {
+        //        select: {
+        //            id: true,
+        //            name: true
+        //        }
+        //    }
+        //}
 
+    });
+  }
 
-        return this.movies
-    }
-
-
-    create(dto: CreateMovieDto) {
-        const {id, title, description, genre} = dto
-        const newMovie = {id, title, description, genre}
-        this.movies.push(newMovie)
-        return {message: 'Movie created successfully', movies: this.movies}
-    }
 
 }

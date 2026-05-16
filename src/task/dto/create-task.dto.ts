@@ -15,7 +15,7 @@ export class CreateTaskDto {
     @StartsWith('Task:', {message: 'Title must start with prefix "Task:"'})
     @MinLength(2, {message: 'Title must be at least 2 characters'})
     @MaxLength(300, {message: 'Title must be max 300 characters'})
-    title!: string
+        title!: string
 
     @IsString()
     @IsNotEmpty()
@@ -29,6 +29,7 @@ export class CreateTaskDto {
     @IsInt()
     @IsPositive({message: 'Priority must be a positive number'})
     @IsOptional()
+    
         priority?: number
 
     @IsOptional()
@@ -37,6 +38,7 @@ export class CreateTaskDto {
         tags: TaskTag[] = [];
 
     @IsNotEmpty()
-    @IsUUID('all', {message: 'userId must be a valid UUID'})
-        userId?: string
+    @IsInt()
+    //@IsUUID('all', {message: 'userId must be a valid UUID'})
+        userId!: number
 }

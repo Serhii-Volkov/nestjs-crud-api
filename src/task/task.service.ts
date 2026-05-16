@@ -2,27 +2,34 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { CreateTaskDto } from './dto/create-task.dto';
 import { PatchUpdateTaskDto } from './dto/patch-update-task.dto';
 import {PutUpdateTaskDto} from './dto/put-update-task.dto'
-import {prisma} from '../../lib/prisma'
+import { PrismaService } from '../prisma/prisma.service';
+
 
 @Injectable()
 export class TaskService {
-
+  constructor(private readonly prisma: PrismaService) {}
    
 
 
     async findAll() {
-        const tasks = await prisma.task.findMany()
+        const tasks = await this.prisma.task.findMany()
         return tasks
     }
 
-    async create() {
-        await prisma.task.create({
-  data: {
-    title: 'task1',
-    description: 'task1 description',
-  },
-});
+   async create(dto) {
+        try {
+          const tasks = await this.prisma.task.create({
+            data: dto,
+          });
+
+          return tasks;
+        } catch (e) {
+          console.log(e);
+          throw e;
+        }
     }
+       
+    
 
 
    //findById(id: string) {

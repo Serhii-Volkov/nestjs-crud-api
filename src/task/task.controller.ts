@@ -16,8 +16,8 @@ export class TaskController {
   }
 
   @Post() 
-  create() {
-    return this.taskService.create()
+  create(@Body() dto: CreateTaskDto) {
+    return this.taskService.create(dto)
   }
   
   //@Get('by-id/:id')

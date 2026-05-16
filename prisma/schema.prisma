@@ -11,18 +11,111 @@ datasource db {
   provider = "postgresql"
 }
 
+model User { 
+  id    Int     @id @default(autoincrement()) 
+
+  email String  @unique
+  password String
+
+  name  String?
+  tasks Task[]
+
+  @@map("users")
+} 
+
 model Task {
-  id String @id @default(uuid())
+  id    Int    @id @default(autoincrement()) 
+
   title String
   description String
+
   isCompleted Boolean? @default(false) @map("is_completed")
   priority Int? @default(0)
+
   tags String[]
-  userId String? @map("user_id")
+
+  user User @relation(fields: [userId], references: [id])
+  userId Int @map("user_id")
   
   @@index([userId])
   @@index([userId, title])
   @@index([title])
 
   @@map("tasks")
+}
+
+
+model Movie {
+  id Int @id @default(autoincrement())
+
+  title String 
+  description String?
+  releaseYear Int @map("release_year")
+
+  rating Float @default(0.0)
+  isAvailable Boolean @default(false) @map("is_available")
+
+  genre Genre @default(ACTION)
+
+  poster MoviePoster? @relation(fields: [posterId],references: [id],onDelete: Cascade)
+  posterId Int? @unique @map("poster_id")
+
+  reviews Review[] @relation("movie_reviews")
+  actors Actor[] @relation("movie_actors")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([isAvailable, createdAt])
+  @@index([title])
+  @@index([releaseYear])
+  @@index([genre])
+  
+  @@map("movies")
+}
+
+model MoviePoster {
+  id Int @id @default(autoincrement())
+
+  url String
+  movie Movie? 
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("movie_posters")
+}
+
+model Actor {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+
+  movies Movie[] @relation("movie_actors")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("actors")
+}
+model Review {
+  id Int @id @default(autoincrement())
+
+  content String
+  rating Decimal @default("0.0") @db.Decimal(3,1)
+
+  movie Movie @relation("movie_reviews",fields: [movieId], references: [id], onDelete: Cascade)
+  movieId Int @map("movie_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("reviews")
+}
+
+enum Genre {
+  ACTION
+  COMEDY
+  DRAMA
+  HORROR
 }

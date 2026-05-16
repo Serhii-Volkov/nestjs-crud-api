@@ -1,6 +1,6 @@
 import { Controller, Get, Query, Post, Body } from '@nestjs/common';
 import { MovieService } from './movie.service';
-import { CreateMovieDto } from './dto/create-movie.dto';
+
 
 @Controller({
   path: 'movies',
@@ -10,13 +10,8 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
-  @Get()
-  findAll(@Query('genre') genre?: string) {
-    return this.movieService.findAll(genre);
-  }
-
-  @Post() 
-  create(@Body() dto: CreateMovieDto) {
-    return this.movieService.create(dto)
+ @Get('all')
+  async findAll() {
+    return await this.movieService.findAll();
   }
 }
