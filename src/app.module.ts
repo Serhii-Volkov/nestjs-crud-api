@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, type NestModule } from '@nestjs/common';
 
 import { ConfigModule } from '@nestjs/config';
 
@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { HttpModule } from './http/http.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ActorModule } from './actor/actor.module';
+import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 
 @Module({
   imports: [
@@ -31,4 +32,12 @@ import { ActorModule } from './actor/actor.module';
   providers: [AppService],
 })
 
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+      consumer.apply(LoggerMiddleware).forRoutes('*') // Работает на всех маршрутах
+                                      //.apply(FirstMiddleware, SecondMiddleware, LoggerMiddleware) // Работает последовательно, сначала FirstMiddleware, потом SecondMiddleware, потом LoggerMiddleware
+                                      //.exclude('api/movies', 'api/movies/:id') // На этих маршрутах не работает
+                                      //.forRoutes(AppController) // Работает на всех маршрутах контроллера AppController
+                                      //.forRoutes({ path: 'movies', method: RequestMethod.POST }) // Работает только на POST запросах к маршруту /movies
+  }
+}
