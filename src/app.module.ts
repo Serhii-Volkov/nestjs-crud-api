@@ -28,7 +28,6 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
   ],
 
   controllers: [AppController],
-
   providers: [AppService],
 })
 

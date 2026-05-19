@@ -5,4 +5,3 @@ export class PatchUpdateTaskDto extends PartialType(CreateTaskDto) {}
 //Скопировал CreateTaskDto и сделал поля необязательными с помощью PartialType()
 
 
-//Сделать  Replac dto
