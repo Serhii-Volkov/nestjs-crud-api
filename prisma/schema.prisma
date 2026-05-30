@@ -17,8 +17,8 @@ model User {
   email String  @unique
   password String
 
-  name  String?
-  tasks Task[]
+  name  String
+  
 
   @@map("users")
 } 
@@ -34,12 +34,11 @@ model Task {
 
   tags String[]
 
-  user User @relation(fields: [userId], references: [id])
-  userId Int @map("user_id")
   
-  @@index([userId])
-  @@index([userId, title])
-  @@index([title])
+  
+  
+  @@index([ title])
+  
 
   @@map("tasks")
 }

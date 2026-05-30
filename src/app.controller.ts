@@ -1,7 +1,7 @@
 import { Controller, Get, Body, Post, UsePipes, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { StringToLowercasePipe } from './common/pipes/string-to-lowercase.pipe';
-import { AuthGuard } from './common/guards/auth.guard';
+//import { AuthGuard } from './common/guards/auth.guard';
 import { UserAgent } from './common/decorators/user-agent.decorators';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
@@ -20,7 +20,7 @@ export class AppController {
     return this.appService.create(title)
   }
 
-  @UseGuards(AuthGuard) // Пример использования guard
+  //@UseGuards(AuthGuard) // Пример использования guard
   @UseInterceptors(ResponseInterceptor)
   @Get('/profile')
   getProfile(@UserAgent() userAgent: string) {

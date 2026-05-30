@@ -2,7 +2,7 @@ import { Controller, Get, Query, Post, Body, Param, Patch, Delete, HttpStatus } 
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiResponse, ApiParam } from '@nestjs/swagger';
 
 
 @ApiTags('Movies') // Группа для Swagger документации
@@ -34,6 +34,7 @@ export class MovieController {
     return await this.movieService.create(dto)
   }
 
+  
   @Get('/:id')
   async findById(@Param('id') id: number) {
     return await this.movieService.findById(id);

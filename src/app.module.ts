@@ -7,11 +7,12 @@ import { AppService } from './app.service';
 
 import { TaskModule } from './task/task.module';
 import { MovieModule } from './movie/movie.module';
-import { UserModule } from './user/user.module';
+//import { UserModule } from './user/user.module';
 import { HttpModule } from './http/http.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ActorModule } from './actor/actor.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,9 +23,10 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
     PrismaModule,
     TaskModule,
     MovieModule,
-    UserModule,
+    //UserModule,
     HttpModule,
     ActorModule,
+    AuthModule,
   ],
 
   controllers: [AppController],

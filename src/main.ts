@@ -3,8 +3,9 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 //import { ConfigModule } from '@nestjs/config';
 //import { Module } from '@nestjs/common';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+//import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import cookieParser from 'cookie-parser';
 
 const PORT = process.env.PORT 
 console.log(PORT);
@@ -13,13 +14,14 @@ console.log(PORT);
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.use(cookieParser())
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // удаляет из запроса все поля, которых нет в DTO (защита от лишних/вредных данных)
     }),
   );
 
-  app.useGlobalFilters(new AllExceptionsFilter()) // Глобальный фильтр для обработки исключений
+  //app.useGlobalFilters(new AllExceptionsFilter()) // Глобальный фильтр для обработки исключений
   //app.enableCors({
   //   origin: process.env.CLIENT_URL, // Разрешаем CORS только для указанного URL
   //   или origin: ['http://host1.com', 'http://host2.com'] для нескольких доменов
