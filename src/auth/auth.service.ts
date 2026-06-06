@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, BadRequestException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterRequest } from './dto/register.dto'
 import { hash, verify } from 'argon2';
@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import type { JwtPayload } from './interfaces/jwt.interface';
 import { LoginRequest } from './dto/login.dto';
-import type { Response } from 'express';
+import type { Response, Request } from 'express';
 import { isDev } from '../utils/is-dev.utils';
 
 
@@ -45,7 +45,7 @@ export class AuthService {
             name, email, password: await hash(password)
         }})
 
-       return this.generateTokens(user.id.toString());
+       return this.auth(res, user.id.toString());
     }
 
     async login(res: Response, dto: LoginRequest) {
@@ -72,6 +72,50 @@ export class AuthService {
         return this.auth(res, user.id.toString())
     }
 
+    async refresh(res: Response, req: Request) {
+      const refreshToken = req.cookies['refreshToken']
+
+      if(!refreshToken) {
+        throw new UnauthorizedException('Недействительный refresh-токен')
+      }
+
+      const payload: JwtPayload = await this.jwtService.verifyAsync(refreshToken)
+
+      if(payload) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: Number(payload.id),
+            },
+            select: {
+                id: true,
+            }
+        })
+
+        if(!user) {
+            throw new NotFoundException('Пользователь не найден')
+        }
+
+        return this.auth(res, user.id.toString())
+      }
+    }
+
+    async validate(id: string) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+               id: Number(id)
+            }
+        })
+
+        if(!user){
+                throw new NotFoundException()
+            }
+
+        return user
+    }
+
+    async logout(res: Response) {
+        this.setCookie(res, 'refreshToken', new Date(0))
+    }
 
     private auth(res: Response, id: string) {
       const expires = new Date(

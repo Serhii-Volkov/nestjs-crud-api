@@ -32,13 +32,14 @@ export class TaskService {
     
 
 
-   //findById(id: string) {
-   //    const task = this.tasks.find(task => task.id === id)
-   //    if(!task) {
-   //        throw new NotFoundException('Task not found')
-   //    }
-   //    return task
-   //}
+   findById(id: string) {
+       const taskId = Number(id)
+       const task = this.prisma.task.findUnique({where: {id: taskId}})
+       if(!task) {
+           throw new NotFoundException('Task not found')
+       }
+       return task
+   }
 
 
    //create(dto: CreateTaskDto) {

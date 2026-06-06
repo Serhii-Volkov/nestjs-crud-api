@@ -118,3 +118,12 @@ enum Genre {
   DRAMA
   HORROR
 }
+
+model Message {
+  id Int @id @default(autoincrement())
+  message String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("messages")
+}

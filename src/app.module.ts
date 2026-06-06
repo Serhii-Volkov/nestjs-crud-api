@@ -13,6 +13,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ActorModule } from './actor/actor.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthModule } from './auth/auth.module';
     HttpModule,
     ActorModule,
     AuthModule,
+    ChatModule,
   ],
 
   controllers: [AppController],

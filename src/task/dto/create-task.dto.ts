@@ -37,8 +37,5 @@ export class CreateTaskDto {
     @IsEnum(TaskTag, {each: true, message: 'Tags must be one of the following values: work, study, home'})
         tags: TaskTag[] = [];
 
-    @IsNotEmpty()
-    @IsInt()
-    //@IsUUID('all', {message: 'userId must be a valid UUID'})
-        userId!: number
+    
 }

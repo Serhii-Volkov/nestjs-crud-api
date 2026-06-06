@@ -20,10 +20,10 @@ export class TaskController {
     return this.taskService.create(dto)
   }
   
-  //@Get('by-id/:id')
-  //findById(@Param('id') id: string) {
-  //  return this.taskService.findById(Number(id))
-  //}
+  @Get('by-id/:id')
+  findById(@Param('id') id: string) {
+    return this.taskService.findById(id)
+  }
 //
   //@Post('create')
   //create(@Body() dto: CreateTaskDto) {
